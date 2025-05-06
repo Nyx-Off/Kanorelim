@@ -1,0 +1,261 @@
+/* responsive.css - Styles pour les différentes tailles d'écran */
+
+/* Tablettes et petits écrans (max 992px) */
+@media screen and (max-width: 992px) {
+    /* Header */
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .nav-links li {
+        margin-left: 15px;
+    }
+    
+    .nav-links a {
+        font-size: 1rem;
+    }
+    
+    /* Hero Section */
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    /* About Section */
+    .about-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .about-image, 
+    .about-text {
+        flex: none;
+        width: 100%;
+    }
+    
+    /* Specialties Grid */
+    .specialties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Reservation Form */
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    /* Footer */
+    .footer-container {
+        gap: 30px;
+    }
+    
+    .footer-column {
+        flex-basis: calc(50% - 30px);
+    }
+}
+
+/* Mobiles (max 768px) */
+@media screen and (max-width: 768px) {
+    /* Header */
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav {
+        margin-top: 15px;
+        width: 100%;
+    }
+    
+    #nav-toggle {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        height: 0;
+        overflow: hidden;
+        transition: var(--transition-medium);
+        padding: 0;
+        margin-top: 15px;
+    }
+    
+    .nav-links.show {
+        height: auto;
+    }
+    
+    .nav-links li {
+        margin: 0;
+        text-align: center;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Hero Section */
+    .hero {
+        height: 70vh;
+        min-height: 500px;
+    }
+    
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero h2 {
+        font-size: 1.6rem;
+    }
+    
+    /* Section Spacing */
+    .about-section,
+    .specialties,
+    .events,
+    .reservation,
+    .testimonials {
+        padding: 60px 0;
+    }
+    
+    /* Specialties Grid */
+    .specialties-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Event Cards */
+    .event-date {
+        padding: 15px;
+        min-width: 80px;
+    }
+    
+    .event-date .day {
+        font-size: 1.8rem;
+    }
+    
+    .event-details {
+        padding: 15px;
+    }
+    
+    /* Reservation Form */
+    .reservation-form-container {
+        padding: 20px;
+    }
+    
+    /* Testimonials */
+    .testimonial-slide {
+        padding: 30px 20px;
+    }
+    
+    .testimonial-slide p {
+        font-size: 1rem;
+    }
+    
+    /* Footer */
+    .footer-column {
+        flex-basis: 100%;
+    }
+}
+
+/* Petits mobiles (max 480px) */
+@media screen and (max-width: 480px) {
+    /* Logo */
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+    
+    .tagline {
+        font-size: 0.9rem;
+    }
+    
+    /* Hero Section */
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .cta-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    /* Section Titles */
+    .section-title h2 {
+        font-size: 2rem;
+    }
+    
+    /* Testimonial */
+    .testimonial-slide {
+        padding: 20px 15px;
+    }
+    
+    .quote {
+        font-size: 1.5rem;
+    }
+}
+
+/* Print styles - pour l'impression */
+@media print {
+    .nav-toggle,
+    .hero,
+    .cta-button,
+    .reservation-form,
+    .testimonials,
+    .social-links,
+    .copyright {
+        display: none !important;
+    }
+    
+    header {
+        position: static;
+        box-shadow: none;
+        color: #000;
+        background: #fff;
+    }
+    
+    .logo h1,
+    .tagline {
+        color: #000;
+    }
+    
+    .nav-links a {
+        color: #000;
+    }
+    
+    .about-section,
+    .specialties,
+    .events,
+    .footer {
+        padding: 20px 0;
+        background: #fff;
+    }
+    
+    .about-content,
+    .specialties-grid,
+    .event-list {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .footer {
+        color: #000;
+        background: #fff;
+    }
+    
+    .footer h3,
+    .footer-links a,
+    .hours-list li,
+    .contact-list li {
+        color: #000;
+    }
+}
