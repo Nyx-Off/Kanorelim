@@ -12,6 +12,7 @@ function isActiveLink($page) {
     return ($current_page == $page) ? 'active' : '';
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

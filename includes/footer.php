@@ -1,3 +1,5 @@
+
+<?php
 // footer.php - Pied de page du site
 // Inclure la configuration si ce n'est pas déjà fait
 if (!defined('INCLUDED_CONFIG')) {

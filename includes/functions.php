@@ -1,3 +1,5 @@
+
+<?php
 // functions.php - Fonctions utilitaires
 // Inclure la configuration si ce n'est pas déjà fait
 if (!defined('INCLUDED_CONFIG')) {
@@ -245,3 +247,5 @@ function generateMenuHTML($categories) {
     
     return $html;
 }
+
+?>
