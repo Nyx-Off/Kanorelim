@@ -1,5 +1,5 @@
 # Kanorelim
-
+```
 kanorelim/
 ├── index.php            // Page d'accueil
 ├── menu.php             // Menu et boissons
@@ -24,3 +24,4 @@ kanorelim/
     ├── index.php        // Tableau de bord admin
     ├── login.php        // Page de connexion
     └── includes/        // Fichiers inclus pour l'administration
+```
