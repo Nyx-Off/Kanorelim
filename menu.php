@@ -1,19 +1,19 @@
 <?php
 // menu.php - Page du menu
-// Inclure les fichiers nécessaires
+// Inclure les fichiers nÃ©cessaires
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
-// Inclure l'en-tête
+// Inclure l'en-tÃªte
 include 'includes/header.php';
 ?>
 
 <main>
-    <!-- Bannière de la page -->
+    <!-- BanniÃ¨re de la page -->
     <div class="page-banner">
         <div class="banner-content">
             <h1>Notre Menu</h1>
-            <p>Des saveurs d'antan pour un festin médiéval</p>
+            <p>Des saveurs d'antan pour un festin mÃ©diÃ©val</p>
         </div>
     </div>
 
@@ -21,34 +21,34 @@ include 'includes/header.php';
         <div class="container">
             <div class="menu-intro">
                 <div class="section-title">
-                    <h2>Savourez l'Authenticité</h2>
+                    <h2>Savourez l'AuthenticitÃ©</h2>
                     <div class="medieval-divider"></div>
                 </div>
-                <p class="intro-text">Nos mets et boissons sont préparés selon des recettes ancestrales, avec des ingrédients locaux et de saison. Plongez dans une expérience culinaire authentique qui vous transportera à l'époque des grands banquets médiévaux.</p>
+                <p class="intro-text">Nos mets et boissons sont prÃ©parÃ©s selon des recettes ancestrales, avec des ingrÃ©dients locaux et de saison. Plongez dans une expÃ©rience culinaire authentique qui vous transportera Ã  l'Ã©poque des grands banquets mÃ©diÃ©vaux.</p>
                 <div class="legend">
-                    <span class="vegetarian-label"><i class="fas fa-leaf"></i> Plat végétarien</span>
+                    <span class="vegetarian-label"><i class="fas fa-leaf"></i> Plat vÃ©gÃ©tarien</span>
                 </div>
             </div>
 
             <div class="menu-container">
-                <!-- Menu généré dynamiquement -->
+                <!-- Menu gÃ©nÃ©rÃ© dynamiquement -->
                 <?php echo generateMenuHTML($categories_menu); ?>
             </div>
 
             <div class="menu-notes">
                 <h3>Notes sur notre cuisine</h3>
-                <p>Tous nos plats sont préparés sur place avec des ingrédients frais et locaux.</p>
-                <p>Notre pain est cuit quotidiennement dans notre four à bois traditionnel.</p>
-                <p>Nous pouvons adapter certains plats pour les régimes spéciaux, n'hésitez pas à nous consulter.</p>
+                <p>Tous nos plats sont prÃ©parÃ©s sur place avec des ingrÃ©dients frais et locaux.</p>
+                <p>Notre pain est cuit quotidiennement dans notre four Ã  bois traditionnel.</p>
+                <p>Nous pouvons adapter certains plats pour les rÃ©gimes spÃ©ciaux, n'hÃ©sitez pas Ã  nous consulter.</p>
             </div>
 
             <div class="center-button">
-                <a href="#reservation" class="cta-button">Réserver une table</a>
+                <a href="#reservation" class="cta-button">RÃ©server une table</a>
             </div>
         </div>
     </section>
 
-    <!-- Section spéciale du Chef -->
+    <!-- Section spÃ©ciale du Chef -->
     <section class="chef-special">
         <div class="container">
             <div class="section-title">
@@ -60,12 +60,12 @@ include 'includes/header.php';
                     <img src="/api/placeholder/600/400" alt="Festin du Seigneur">
                 </div>
                 <div class="special-text">
-                    <h3>Notre menu dégustation</h3>
-                    <p>Pour les grandes occasions, découvrez notre menu dégustation qui vous fera voyager à travers les saveurs du Moyen Âge.</p>
-                    <p>Ce festin comprend six services accompagnés de nos meilleures boissons, servis dans une ambiance digne des plus grands banquets seigneuriaux.</p>
-                    <p>Idéal pour les célébrations en groupe, ce menu est disponible sur réservation uniquement (minimum 4 personnes).</p>
+                    <h3>Notre menu dÃ©gustation</h3>
+                    <p>Pour les grandes occasions, dÃ©couvrez notre menu dÃ©gustation qui vous fera voyager Ã  travers les saveurs du Moyen Ã‚ge.</p>
+                    <p>Ce festin comprend six services accompagnÃ©s de nos meilleures boissons, servis dans une ambiance digne des plus grands banquets seigneuriaux.</p>
+                    <p>IdÃ©al pour les cÃ©lÃ©brations en groupe, ce menu est disponible sur rÃ©servation uniquement (minimum 4 personnes).</p>
                     <div class="special-price">
-                        <span>60€ par personne</span>
+                        <span>60â‚¬ par personne</span>
                     </div>
                     <a href="contact.php" class="text-button">Nous contacter pour plus d'informations <i class="fas fa-arrow-right"></i></a>
                 </div>
@@ -73,7 +73,7 @@ include 'includes/header.php';
         </div>
     </section>
 
-    <!-- Témoignages sur la nourriture -->
+    <!-- TÃ©moignages sur la nourriture -->
     <section class="food-testimonials">
         <div class="container">
             <div class="section-title">
@@ -83,7 +83,7 @@ include 'includes/header.php';
             <div class="testimonial-grid">
                 <div class="testimonial-card">
                     <div class="quote"><i class="fas fa-quote-left"></i></div>
-                    <p>"Le civet de cerf était succulent, tendre à souhait et parfumé aux herbes forestières. Un vrai délice qui m'a transporté au temps des chevaliers !"</p>
+                    <p>"Le civet de cerf Ã©tait succulent, tendre Ã  souhait et parfumÃ© aux herbes forestiÃ¨res. Un vrai dÃ©lice qui m'a transportÃ© au temps des chevaliers !"</p>
                     <div class="testimonial-author">
                         <span class="name">Geoffroy de Charny</span>
                         <div class="stars">
@@ -97,7 +97,7 @@ include 'includes/header.php';
                 </div>
                 <div class="testimonial-card">
                     <div class="quote"><i class="fas fa-quote-left"></i></div>
-                    <p>"L'hydromel est divinement préparé, avec des notes de miel subtilement équilibrées. La meilleure boisson médiévale que j'ai goûtée !"</p>
+                    <p>"L'hydromel est divinement prÃ©parÃ©, avec des notes de miel subtilement Ã©quilibrÃ©es. La meilleure boisson mÃ©diÃ©vale que j'ai goÃ»tÃ©e !"</p>
                     <div class="testimonial-author">
                         <span class="name">Blanche de Castille</span>
                         <div class="stars">
@@ -111,7 +111,7 @@ include 'includes/header.php';
                 </div>
                 <div class="testimonial-card">
                     <div class="quote"><i class="fas fa-quote-left"></i></div>
-                    <p>"La tourte rustique est généreuse et savoureuse, un régal même pour les non-végétariens. Les légumes et champignons sont parfaitement assaisonnés."</p>
+                    <p>"La tourte rustique est gÃ©nÃ©reuse et savoureuse, un rÃ©gal mÃªme pour les non-vÃ©gÃ©tariens. Les lÃ©gumes et champignons sont parfaitement assaisonnÃ©s."</p>
                     <div class="testimonial-author">
                         <span class="name">Hildegarde de Bingen</span>
                         <div class="stars">
@@ -127,22 +127,22 @@ include 'includes/header.php';
         </div>
     </section>
 
-    <!-- Section de banquet privé -->
+    <!-- Section de banquet privÃ© -->
     <section class="private-dining">
         <div class="container">
             <div class="section-title">
-                <h2>Banquets Privés</h2>
+                <h2>Banquets PrivÃ©s</h2>
                 <div class="medieval-divider"></div>
             </div>
             <div class="private-dining-content">
                 <div class="private-dining-text">
-                    <p>La Taverne Kanorelim peut accueillir vos événements privés : anniversaires, mariages médiévaux, fêtes d'entreprise ou toute autre célébration spéciale.</p>
-                    <p>Notre salle du donjon peut accueillir jusqu'à 50 convives pour un banquet médiéval inoubliable.</p>
-                    <p>Nous proposons des menus personnalisés, des animations d'époque (musique, jongleurs, conteurs) et une décoration thématique.</p>
+                    <p>La Taverne Kanorelim peut accueillir vos Ã©vÃ©nements privÃ©s : anniversaires, mariages mÃ©diÃ©vaux, fÃªtes d'entreprise ou toute autre cÃ©lÃ©bration spÃ©ciale.</p>
+                    <p>Notre salle du donjon peut accueillir jusqu'Ã  50 convives pour un banquet mÃ©diÃ©val inoubliable.</p>
+                    <p>Nous proposons des menus personnalisÃ©s, des animations d'Ã©poque (musique, jongleurs, conteurs) et une dÃ©coration thÃ©matique.</p>
                     <a href="contact.php" class="cta-button">Demander un devis</a>
                 </div>
                 <div class="private-dining-image">
-                    <img src="/api/placeholder/500/350" alt="Salle de banquet privé">
+                    <img src="/api/placeholder/500/350" alt="Salle de banquet privÃ©">
                 </div>
             </div>
         </div>
@@ -150,7 +150,7 @@ include 'includes/header.php';
 </main>
 
 <style>
-/* Styles spécifiques à la page menu */
+/* Styles spÃ©cifiques Ã  la page menu */
 .page-banner {
     height: 40vh;
     min-height: 300px;

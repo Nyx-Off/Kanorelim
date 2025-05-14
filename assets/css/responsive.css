@@ -1,6 +1,6 @@
-/* responsive.css - Styles pour les différentes tailles d'écran */
+/* responsive.css - Styles pour les diffÃ©rentes tailles d'Ã©cran */
 
-/* Tablettes et petits écrans (max 992px) */
+/* Tablettes et petits Ã©crans (max 992px) */
 @media screen and (max-width: 992px) {
     /* Header */
     .logo h1 {

@@ -20,9 +20,9 @@ function isActiveLink($page) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= SITE_TITLE ?> - <?= SITE_DESCRIPTION ?></title>
     <meta name="description" content="La Taverne Kanorelim vous offre une expérience médiévale authentique avec des mets traditionnels, des boissons d'époque et une ambiance unique.">
-    <link rel="stylesheet" href="<?= CSS_URL ?>style.css">
-    <link rel="stylesheet" href="<?= CSS_URL ?>responsive.css">
-    <script src="<?= JS_URL ?>main.js" defer></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <script src="assets/js/main.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?php if (basename($_SERVER['PHP_SELF']) == 'contact.php'): ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">

@@ -1,13 +1,23 @@
 // main.js - Script principal pour la Taverne Kanorelim
 
 /**
- * Fonctions communes à toutes les pages
+ * Fonctions communes Ã  toutes les pages
  */
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     initializeScrollAnimations();
-    handleReservationForm();
-    initializeTestimonials();
+    
+    // Initialiser les fonctionnalitÃ©s spÃ©cifiques selon la page
+    const currentPage = location.pathname.split('/').pop() || 'index.php';
+    
+    if (currentPage === 'index.php' || currentPage === '') {
+        handleReservationForm();
+        initializeTestimonials();
+    } else if (currentPage === 'galerie.php') {
+        initializeGallery();
+    } else if (currentPage === 'contact.php') {
+        initializeMap();
+    }
 });
 
 /**
@@ -40,22 +50,10 @@ function initializeNavigation() {
             }
         });
     }
-
-    // Mise en évidence du lien de navigation actif
-    const currentLocation = window.location.pathname;
-    const navItems = document.querySelectorAll('.nav-links a');
-    
-    navItems.forEach(item => {
-        if (item.getAttribute('href') === currentLocation) {
-            item.classList.add('active');
-        } else if (currentLocation === '/' && item.getAttribute('href') === 'index.php') {
-            item.classList.add('active');
-        }
-    });
 }
 
 /**
- * Animations au défilement
+ * Animations au dÃ©filement
  */
 function initializeScrollAnimations() {
     const elementsToAnimate = document.querySelectorAll('.about-content, .specialties-grid, .event-list, .reservation-form-container');
@@ -71,49 +69,33 @@ function initializeScrollAnimations() {
         });
     }
 
-    // Exécuter une fois au chargement
+    // ExÃ©cuter une fois au chargement
     revealOnScroll();
     
-    // Puis à chaque défilement
+    // Puis Ã  chaque dÃ©filement
     window.addEventListener('scroll', revealOnScroll);
 }
 
 /**
- * Gestion du formulaire de réservation
+ * Gestion du formulaire de rÃ©servation
  */
 function handleReservationForm() {
     const reservationForm = document.getElementById('reservation-form');
     
     if (reservationForm) {
+        // Le formulaire est gÃ©rÃ© par PHP, pas besoin d'ajouter de code JavaScript
+        // Si vous souhaitez ajouter une validation cÃ´tÃ© client:
+        
         reservationForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validation du formulaire
             if (!validateReservationForm(this)) {
-                return;
+                e.preventDefault();
             }
-            
-            // Collecte des données pour l'envoi
-            const formData = new FormData(this);
-            
-            // Simulation d'envoi (à remplacer par un vrai envoi AJAX)
-            simulateFormSubmission(formData)
-                .then(response => {
-                    // Affichage d'un message de succès
-                    showSuccessMessage('Votre réservation a été enregistrée ! Nous vous contacterons bientôt pour confirmation.');
-                    // Réinitialisation du formulaire
-                    this.reset();
-                })
-                .catch(error => {
-                    // Affichage d'un message d'erreur
-                    showErrorMessage('Une erreur est survenue. Veuillez réessayer ou nous contacter par téléphone.');
-                });
         });
     }
 }
 
 /**
- * Validation du formulaire de réservation
+ * Validation du formulaire de rÃ©servation
  */
 function validateReservationForm(form) {
     // Validation du nom
@@ -148,7 +130,7 @@ function validateReservationForm(form) {
     // Validation du nombre de convives
     const guestsInput = form.querySelector('#guests');
     if (guestsInput.value < 1 || guestsInput.value > 20) {
-        showErrorMessage('Le nombre de convives doit être entre 1 et 20.');
+        showErrorMessage('Le nombre de convives doit Ãªtre entre 1 et 20.');
         guestsInput.focus();
         return false;
     }
@@ -157,68 +139,32 @@ function validateReservationForm(form) {
 }
 
 /**
- * Simulation d'envoi du formulaire (à remplacer par un vrai appel AJAX)
- */
-function simulateFormSubmission(formData) {
-    return new Promise((resolve, reject) => {
-        // Simulation d'un délai réseau
-        setTimeout(() => {
-            // 90% de chance de succès pour la démo
-            if (Math.random() > 0.1) {
-                resolve({ success: true });
-            } else {
-                reject(new Error('Simulation d\'erreur réseau'));
-            }
-        }, 1000);
-    });
-}
-
-/**
- * Affichage d'un message de succès
- */
-function showSuccessMessage(message) {
-    showMessage(message, 'success');
-}
-
-/**
  * Affichage d'un message d'erreur
  */
 function showErrorMessage(message) {
-    showMessage(message, 'error');
-}
-
-/**
- * Affichage d'un message temporaire
- */
-function showMessage(message, type) {
-    // Suppression des messages précédents
-    const existingMessages = document.querySelectorAll('.message');
-    existingMessages.forEach(msg => msg.remove());
+    // CrÃ©er un Ã©lÃ©ment de message si nÃ©cessaire
+    let messageElement = document.querySelector('.message');
     
-    // Création du nouveau message
-    const messageElement = document.createElement('div');
-    messageElement.className = `message message-${type}`;
-    messageElement.textContent = message;
-    
-    // Insertion du message dans le DOM
-    const reservationForm = document.getElementById('reservation-form');
-    if (reservationForm) {
-        reservationForm.parentNode.insertBefore(messageElement, reservationForm);
-    } else {
-        document.body.appendChild(messageElement);
+    if (!messageElement) {
+        messageElement = document.createElement('div');
+        messageElement.className = 'message message-error';
+        
+        const reservationForm = document.getElementById('reservation-form');
+        if (reservationForm) {
+            reservationForm.parentNode.insertBefore(messageElement, reservationForm);
+        }
     }
     
-    // Suppression automatique après 5 secondes
-    setTimeout(() => {
-        messageElement.classList.add('fade-out');
-        setTimeout(() => {
-            messageElement.remove();
-        }, 500);
-    }, 5000);
+    // DÃ©finir le message et le type
+    messageElement.textContent = message;
+    messageElement.className = 'message message-error';
+    
+    // Faire dÃ©filer jusqu'au message
+    messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 /**
- * Initialisation du slider de témoignages
+ * Initialisation du slider de tÃ©moignages
  */
 function initializeTestimonials() {
     const slides = document.querySelectorAll('.testimonial-slide');
@@ -248,40 +194,40 @@ function initializeTestimonials() {
         showSlide(currentSlide - 1);
     }
 
-    // Ajouter les event listeners pour les contrôles du slider
+    // Ajouter les event listeners pour les contrÃ´les du slider
     if (nextBtn && prevBtn) {
         nextBtn.addEventListener('click', function() {
-            clearInterval(intervalId); // Arrêter le défilement automatique
+            clearInterval(intervalId);
             nextSlide();
-            startAutoSlide(); // Redémarrer le défilement automatique
+            startAutoSlide();
         });
         
         prevBtn.addEventListener('click', function() {
-            clearInterval(intervalId); // Arrêter le défilement automatique
+            clearInterval(intervalId);
             prevSlide();
-            startAutoSlide(); // Redémarrer le défilement automatique
+            startAutoSlide();
         });
     }
     
     // Ajouter les event listeners pour les points de navigation
     dots.forEach((dot, index) => {
         dot.addEventListener('click', function() {
-            clearInterval(intervalId); // Arrêter le défilement automatique
+            clearInterval(intervalId);
             showSlide(index);
-            startAutoSlide(); // Redémarrer le défilement automatique
+            startAutoSlide();
         });
     });
 
-    // Fonction pour démarrer le défilement automatique
+    // Fonction pour dÃ©marrer le dÃ©filement automatique
     function startAutoSlide() {
-        clearInterval(intervalId); // Nettoyer l'intervalle précédent
-        intervalId = setInterval(nextSlide, 5000); // Nouveau défilement toutes les 5 secondes
+        clearInterval(intervalId);
+        intervalId = setInterval(nextSlide, 5000);
     }
 
-    // Démarrer le défilement automatique au chargement
+    // DÃ©marrer le dÃ©filement automatique au chargement
     startAutoSlide();
 
-    // Arrêter le défilement lorsque l'utilisateur survole le slider
+    // ArrÃªter le dÃ©filement lorsque l'utilisateur survole le slider
     const sliderContainer = document.getElementById('testimonial-slider');
     if (sliderContainer) {
         sliderContainer.addEventListener('mouseenter', function() {
@@ -295,63 +241,7 @@ function initializeTestimonials() {
 }
 
 /**
- * Animation pour le compteur de statistiques 
- * (à utiliser sur la page À propos)
- */
-function initializeStatCounters() {
-    const counters = document.querySelectorAll('.stat-counter');
-    
-    if (!counters.length) return;
-    
-    let countersStarted = false;
-    
-    function startCounters() {
-        if (countersStarted) return;
-        
-        counters.forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'));
-            const duration = 2000; // 2 secondes
-            const step = Math.ceil(target / (duration / 20)); // Mise à jour toutes les 20ms
-            
-            let current = 0;
-            const updateCounter = setInterval(() => {
-                current += step;
-                if (current > target) {
-                    current = target;
-                    clearInterval(updateCounter);
-                }
-                counter.textContent = current.toLocaleString();
-            }, 20);
-        });
-        
-        countersStarted = true;
-    }
-    
-    // Démarrer les compteurs quand ils sont visibles lors du défilement
-    function checkCounters() {
-        const triggerPosition = window.innerHeight * 0.8;
-        
-        const statsSection = document.querySelector('.stats-section');
-        if (statsSection) {
-            const sectionTop = statsSection.getBoundingClientRect().top;
-            
-            if (sectionTop < triggerPosition) {
-                startCounters();
-                window.removeEventListener('scroll', checkCounters);
-            }
-        }
-    }
-    
-    // Vérifier une fois au chargement
-    checkCounters();
-    
-    // Puis à chaque défilement
-    window.addEventListener('scroll', checkCounters);
-}
-
-/**
  * Initialisation de la galerie d'images 
- * (pour la page Galerie)
  */
 function initializeGallery() {
     const galleryItems = document.querySelectorAll('.gallery-item');
@@ -377,7 +267,7 @@ function initializeGallery() {
             lightbox.classList.add('active');
             currentIndex = index;
             
-            // Désactiver le défilement de la page
+            // DÃ©sactiver le dÃ©filement de la page
             document.body.style.overflow = 'hidden';
         });
     });
@@ -386,12 +276,12 @@ function initializeGallery() {
     if (lightboxClose) {
         lightboxClose.addEventListener('click', function() {
             lightbox.classList.remove('active');
-            // Réactiver le défilement
+            // RÃ©activer le dÃ©filement
             document.body.style.overflow = '';
         });
     }
     
-    // Cliquer en dehors de l'image ferme également la lightbox
+    // Cliquer en dehors de l'image ferme Ã©galement la lightbox
     lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) {
             lightbox.classList.remove('active');
@@ -399,7 +289,7 @@ function initializeGallery() {
         }
     });
     
-    // Image précédente
+    // Image prÃ©cÃ©dente
     if (lightboxPrev) {
         lightboxPrev.addEventListener('click', function() {
             currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
@@ -415,7 +305,7 @@ function initializeGallery() {
         });
     }
     
-    // Mise à jour du contenu de la lightbox
+    // Mise Ã  jour du contenu de la lightbox
     function updateLightboxContent() {
         const item = galleryItems[currentIndex];
         const imgSrc = item.querySelector('img').getAttribute('src');
@@ -450,22 +340,21 @@ function initializeGallery() {
 
 /**
  * Initialisation de la carte pour la page Contact
- * Utilise Leaflet pour afficher une carte interactive
  */
 function initializeMap() {
     const mapContainer = document.getElementById('contact-map');
     
     if (!mapContainer) return;
     
-    // Vérifier si Leaflet est chargé
+    // VÃ©rifier si Leaflet est chargÃ©
     if (typeof L === 'undefined') {
-        console.error('Leaflet n\'est pas chargé. Assurez-vous d\'inclure les fichiers Leaflet.');
+        console.error('Leaflet n\'est pas chargÃ©.');
         return;
     }
     
-    // Coordonnées de la taverne (à remplacer par les vraies coordonnées)
-    const lat = 48.9807; // Exemple: coordonnées de Pontoise
-    const lng = 2.0887;
+    // CoordonnÃ©es de la taverne (Pontoise, France)
+    const lat = 49.0508;
+    const lng = 2.1008;
     
     // Initialisation de la carte
     const map = L.map(mapContainer).setView([lat, lng], 15);
@@ -475,20 +364,13 @@ function initializeMap() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
     
-    // Ajouter un marqueur à l'emplacement de la taverne
-    const taverneIcon = L.icon({
-        iconUrl: 'assets/images/marker.png', // Chemin vers l'icône personnalisée
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-    });
-    
-    const marker = L.marker([lat, lng], { icon: taverneIcon }).addTo(map);
+    // Ajouter un marqueur Ã  l'emplacement de la taverne
+    const marker = L.marker([lat, lng]).addTo(map);
     
     // Ajouter une popup au marqueur
-    marker.bindPopup('<strong>Taverne Kanorelim</strong><br>12 Rue des Templiers<br>Cité Médiévale').openPopup();
+    marker.bindPopup('<strong>Taverne Kanorelim</strong><br>12 Rue des Templiers<br>CitÃ© MÃ©diÃ©vale, Pontoise').openPopup();
     
-    // Ajuster la taille de la carte lors du redimensionnement de la fenêtre
+    // Ajuster la taille de la carte lors du redimensionnement de la fenÃªtre
     window.addEventListener('resize', function() {
         map.invalidateSize();
     });

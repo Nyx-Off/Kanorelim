@@ -1,18 +1,18 @@
 <?php
 // contact.php - Page de contact
-// Inclure les fichiers nécessaires
+// Inclure les fichiers nÃ©cessaires
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
 // Traitement du formulaire si soumis
 $contact_result = handleContactForm();
 
-// Inclure l'en-tête
+// Inclure l'en-tÃªte
 include 'includes/header.php';
 ?>
 
 <main>
-    <!-- Bannière de la page -->
+    <!-- BanniÃ¨re de la page -->
     <div class="page-banner">
         <div class="banner-content">
             <h1>Contact</h1>
@@ -36,7 +36,7 @@ include 'includes/header.php';
                         </div>
                         <div class="info-text">
                             <h3>Adresse</h3>
-                            <p>12 Rue des Templiers<br>Cité Médiévale<br>95300 Pontoise<br>France</p>
+                            <p>12 Rue des Templiers<br>CitÃ© MÃ©diÃ©vale<br>95300 Pontoise<br>France</p>
                         </div>
                     </div>
                     <div class="info-block">
@@ -44,9 +44,9 @@ include 'includes/header.php';
                             <i class="fas fa-phone"></i>
                         </div>
                         <div class="info-text">
-                            <h3>Téléphone</h3>
+                            <h3>TÃ©lÃ©phone</h3>
                             <p>+33 (0)1 23 45 67 89</p>
-                            <p class="note">Disponible tous les jours de 10h à 22h</p>
+                            <p class="note">Disponible tous les jours de 10h Ã  22h</p>
                         </div>
                     </div>
                     <div class="info-block">
@@ -56,7 +56,7 @@ include 'includes/header.php';
                         <div class="info-text">
                             <h3>Email</h3>
                             <p><a href="mailto:contact@kanorelim.fr">contact@kanorelim.fr</a></p>
-                            <p class="note">Nous répondons sous 24 heures</p>
+                            <p class="note">Nous rÃ©pondons sous 24 heures</p>
                         </div>
                     </div>
                     <div class="info-block">
@@ -134,8 +134,8 @@ include 'includes/header.php';
                         </div>
                         <div class="direction-text">
                             <h4>En voiture</h4>
-                            <p>Depuis Paris, prenez l'A15 direction Cergy-Pontoise, sortie Pontoise Centre. Suivez les indications pour la Cité Médiévale.</p>
-                            <p>Parking public à 100m de la taverne.</p>
+                            <p>Depuis Paris, prenez l'A15 direction Cergy-Pontoise, sortie Pontoise Centre. Suivez les indications pour la CitÃ© MÃ©diÃ©vale.</p>
+                            <p>Parking public Ã  100m de la taverne.</p>
                         </div>
                     </div>
                     <div class="direction-block">
@@ -144,7 +144,7 @@ include 'includes/header.php';
                         </div>
                         <div class="direction-text">
                             <h4>En train</h4>
-                            <p>Gare de Pontoise à 10 minutes à pied. Trains directs depuis Paris Gare Saint-Lazare et Paris Gare du Nord.</p>
+                            <p>Gare de Pontoise Ã  10 minutes Ã  pied. Trains directs depuis Paris Gare Saint-Lazare et Paris Gare du Nord.</p>
                         </div>
                     </div>
                     <div class="direction-block">
@@ -153,7 +153,7 @@ include 'includes/header.php';
                         </div>
                         <div class="direction-text">
                             <h4>En bus</h4>
-                            <p>Lignes 30, 34 et 95, arrêt "Cité Médiévale".</p>
+                            <p>Lignes 30, 34 et 95, arrÃªt "CitÃ© MÃ©diÃ©vale".</p>
                         </div>
                     </div>
                 </div>
@@ -165,26 +165,26 @@ include 'includes/header.php';
     <section class="faq-section">
         <div class="container">
             <div class="section-title">
-                <h2>Questions Fréquentes</h2>
+                <h2>Questions FrÃ©quentes</h2>
                 <div class="medieval-divider"></div>
             </div>
             <div class="faq-content">
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Faut-il réserver à l'avance ?</h3>
+                        <h3>Faut-il rÃ©server Ã  l'avance ?</h3>
                         <span class="faq-toggle"><i class="fas fa-plus"></i></span>
                     </div>
                     <div class="faq-answer">
-                        <p>Pour les soirées du vendredi et samedi, ainsi que pour les événements spéciaux, nous recommandons vivement de réserver à l'avance. Pour les autres jours, ce n'est pas obligatoire mais conseillé si vous êtes un groupe de plus de 6 personnes.</p>
+                        <p>Pour les soirÃ©es du vendredi et samedi, ainsi que pour les Ã©vÃ©nements spÃ©ciaux, nous recommandons vivement de rÃ©server Ã  l'avance. Pour les autres jours, ce n'est pas obligatoire mais conseillÃ© si vous Ãªtes un groupe de plus de 6 personnes.</p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Proposez-vous des options végétariennes ?</h3>
+                        <h3>Proposez-vous des options vÃ©gÃ©tariennes ?</h3>
                         <span class="faq-toggle"><i class="fas fa-plus"></i></span>
                     </div>
                     <div class="faq-answer">
-                        <p>Oui, nous proposons plusieurs plats végétariens à notre carte, marqués par un symbole de feuille. Nous pouvons également adapter certains plats sur demande.</p>
+                        <p>Oui, nous proposons plusieurs plats vÃ©gÃ©tariens Ã  notre carte, marquÃ©s par un symbole de feuille. Nous pouvons Ã©galement adapter certains plats sur demande.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -193,16 +193,16 @@ include 'includes/header.php';
                         <span class="faq-toggle"><i class="fas fa-plus"></i></span>
                     </div>
                     <div class="faq-answer">
-                        <p>Les familles sont les bienvenues à la Taverne Kanorelim ! Nous proposons un menu spécial pour les petits chevaliers et princesses, ainsi que des chaises hautes pour les tout-petits. Lors des soirées thématiques après 20h, l'ambiance peut être plus adulte.</p>
+                        <p>Les familles sont les bienvenues Ã  la Taverne Kanorelim ! Nous proposons un menu spÃ©cial pour les petits chevaliers et princesses, ainsi que des chaises hautes pour les tout-petits. Lors des soirÃ©es thÃ©matiques aprÃ¨s 20h, l'ambiance peut Ãªtre plus adulte.</p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>Peut-on privatiser la taverne pour un événement ?</h3>
+                        <h3>Peut-on privatiser la taverne pour un Ã©vÃ©nement ?</h3>
                         <span class="faq-toggle"><i class="fas fa-plus"></i></span>
                     </div>
                     <div class="faq-answer">
-                        <p>Oui, il est possible de privatiser la taverne ou notre salle du donjon pour des événements privés comme des anniversaires, mariages médiévaux ou fêtes d'entreprise. Contactez-nous pour un devis personnalisé.</p>
+                        <p>Oui, il est possible de privatiser la taverne ou notre salle du donjon pour des Ã©vÃ©nements privÃ©s comme des anniversaires, mariages mÃ©diÃ©vaux ou fÃªtes d'entreprise. Contactez-nous pour un devis personnalisÃ©.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -211,7 +211,7 @@ include 'includes/header.php';
                         <span class="faq-toggle"><i class="fas fa-plus"></i></span>
                     </div>
                     <div class="faq-answer">
-                        <p>Oui, nous organisons régulièrement des soirées thématiques avec des troubadours, jongleurs, conteurs ou combats d'épée. Consultez notre page Événements pour connaître le programme.</p>
+                        <p>Oui, nous organisons rÃ©guliÃ¨rement des soirÃ©es thÃ©matiques avec des troubadours, jongleurs, conteurs ou combats d'Ã©pÃ©e. Consultez notre page Ã‰vÃ©nements pour connaÃ®tre le programme.</p>
                     </div>
                 </div>
             </div>
@@ -220,7 +220,7 @@ include 'includes/header.php';
 </main>
 
 <style>
-/* Styles spécifiques à la page contact */
+/* Styles spÃ©cifiques Ã  la page contact */
 .page-banner {
     height: 40vh;
     min-height: 300px;
@@ -646,7 +646,7 @@ include 'includes/header.php';
                     }
                 });
                 
-                // Toggle l'état de l'item actuel
+                // Toggle l'Ã©tat de l'item actuel
                 item.classList.toggle('active');
             });
         });
