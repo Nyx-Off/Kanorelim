@@ -1,6 +1,14 @@
 <?php
 // admin/config.php - Configuration spécifique à l'administration
-define('ADMIN_INCLUDED', true);
+
+// Check if we're already in admin context to prevent redefinition
+if (!defined('ADMIN_INCLUDED')) {
+    define('ADMIN_INCLUDED', true);
+}
+
+// Include the main site configuration if needed
+// But prevent the main site from including admin config
+define('SITE_ADMIN', true);
 require_once '../includes/config.php';
 
 // Configuration de la connexion à la base de données

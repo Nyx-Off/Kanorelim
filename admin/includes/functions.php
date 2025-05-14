@@ -130,13 +130,16 @@ function uploadImage($file, $destination, $filename = '', $max_size = 2097152) {
 }
 
 /**
- * Formate une date pour l'affichage
+ * Formate une date pour l'affichage (version admin)
+ * 
+ * Cette fonction est différente de celle du site principal
+ * car elle utilise IntlDateFormatter directement
  *
  * @param string $date La date au format YYYY-MM-DD
  * @param string $format Le format souhaité
  * @return string La date formatée
  */
-function formatDate($date, $format = 'j F Y') {
+function adminFormatDate($date, $format = 'j F Y') {
     $date_obj = new DateTime($date);
     $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
     $formatter->setPattern($format);
@@ -208,7 +211,7 @@ function logAction($action, $entity, $entity_id = null) {
  */
 function hasPermission($permission) {
     // Si l'utilisateur est admin, il a toutes les permissions
-    if ($_SESSION['admin_role'] === 'admin') {
+    if (isset($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'admin') {
         return true;
     }
     
@@ -231,5 +234,7 @@ function hasPermission($permission) {
     ];
     
     // Vérifier si le rôle de l'utilisateur a la permission demandée
-    return isset($permissions[$_SESSION['admin_role']]) && in_array($permission, $permissions[$_SESSION['admin_role']]);
+    return isset($_SESSION['admin_role']) && 
+           isset($permissions[$_SESSION['admin_role']]) && 
+           in_array($permission, $permissions[$_SESSION['admin_role']]);
 }

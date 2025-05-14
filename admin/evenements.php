@@ -1,5 +1,6 @@
 <?php
 // admin/evenements.php - Gestion des événements
+session_start();
 define('ADMIN_INCLUDED', true);
 require_once 'config.php';
 require_once 'includes/functions.php';
@@ -316,7 +317,7 @@ include 'includes/header.php';
                             <tr>
                                 <td><?php echo htmlspecialchars($event['title']); ?></td>
                                 <td data-sort="<?php echo $event['date']; ?>">
-                                    <?php echo formatDate($event['date']); ?>
+                                    <?php echo adminFormatDate($event['date']); ?>
                                     <?php if (strtotime($event['date']) >= strtotime(date('Y-m-d'))): ?>
                                         <span class="badge badge-info">À venir</span>
                                     <?php else: ?>

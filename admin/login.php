@@ -1,6 +1,10 @@
- <?php
+<?php
 // admin/login.php - Page de connexion à l'administration
 session_start();
+
+// Activer l'affichage des erreurs pendant le développement
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
 
 // Rediriger si déjà connecté
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
@@ -13,6 +17,7 @@ require_once 'config.php';
 
 $error_message = '';
 $success_message = '';
+$debug_info = '';
 
 // Traitement du formulaire de connexion
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -33,6 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$username]);
             $user = $stmt->fetch();
             
+            // Pour le débogage - À supprimer en production
+            if ($user) {
+                $debug_info = "Utilisateur trouvé. Vérification du mot de passe...";
+                
+                // Vérifier si le mot de passe est correct
+                if (password_verify($password, $user['password'])) {
+                    $debug_info .= " Mot de passe correct!";
+                } else {
+                    $debug_info .= " Mot de passe incorrect.";
+                }
+            } else {
+                $debug_info = "Aucun utilisateur trouvé avec ce nom d'utilisateur.";
+            }
+            
             if ($user && password_verify($password, $user['password'])) {
                 // Connexion réussie
                 $_SESSION['admin_logged_in'] = true;
@@ -52,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (PDOException $e) {
             $error_message = 'Erreur du serveur. Veuillez réessayer plus tard.';
+            $debug_info = 'Erreur PDO: ' . $e->getMessage();
         }
     }
 }
@@ -153,6 +173,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        .debug-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        .help-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .help-links a {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #f0e6d2;
+            color: #8B4513;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+        .help-links a:hover {
+            background-color: #D2B48C;
+        }
     </style>
 </head>
 <body>
@@ -177,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form class="login-form" method="post" action="">
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" required>
             </div>
             <div class="form-group">
                 <label for="password">Mot de passe</label>
@@ -185,6 +230,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit" class="login-button">Se connecter</button>
         </form>
+        
+        <?php if (!empty($debug_info)): ?>
+            <div class="debug-info">
+                <strong>Informations de débogage:</strong><br>
+                <?php echo $debug_info; ?>
+            </div>
+        <?php endif; ?>
+        
+        <div class="help-links">
+            <a href="install.php">Installer la base de données</a>
+            <a href="create_admin.php">Créer un utilisateur admin</a>
+        </div>
         
         <div class="back-link">
             <a href="../index.php"><i class="fas fa-arrow-left"></i> Retour au site</a>

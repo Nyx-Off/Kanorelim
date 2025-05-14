@@ -1,9 +1,15 @@
 <?php
-// config.php - Configuration du site
+// includes/config.php - Configuration du site
 // Définition des constantes
 define('SITE_TITLE', 'Taverne Kanorelim');
 define('SITE_DESCRIPTION', 'Une expérience médiévale authentique');
 define('ADMIN_EMAIL', 'contact@kanorelim.fr');
+
+// Skip admin-specific configurations if we're in admin context
+if (defined('SITE_ADMIN')) {
+    // Admin already has these defined, skip the rest
+    return;
+}
 
 // Configuration de la base de données (à activer si besoin)
 /*
