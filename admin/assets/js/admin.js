@@ -4,7 +4,18 @@
  * Fonctions communes à toutes les pages
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle de la barre latérale
+    initializeNavigation();
+    initializeUserDropdown();
+    initDeleteConfirmations();
+    initImagePreviews();
+    initRichTextEditors();
+    initAlertDismiss();
+});
+
+/**
+ * Initialisation de la navigation (sidebar)
+ */
+function initializeNavigation() {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const adminWrapper = document.querySelector('.admin-wrapper');
     const sidebarClose = document.getElementById('sidebar-close');
@@ -20,37 +31,38 @@ document.addEventListener('DOMContentLoaded', function() {
             adminWrapper.classList.add('sidebar-collapsed');
         });
     }
-    
-    // Toggle du menu utilisateur
+}
+
+/**
+ * Initialisation du dropdown utilisateur
+ */
+function initializeUserDropdown() {
     const userDropdownToggle = document.querySelector('.user-dropdown-toggle');
     const userDropdownMenu = document.querySelector('.user-dropdown-menu');
     
     if (userDropdownToggle && userDropdownMenu) {
+        // Toggle au clic sur le bouton
         userDropdownToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             userDropdownMenu.classList.toggle('show');
         });
         
         // Fermer le menu au clic en dehors
-        document.addEventListener('click', function() {
-            if (userDropdownMenu.classList.contains('show')) {
+        document.addEventListener('click', function(e) {
+            if (!userDropdownToggle.contains(e.target) && !userDropdownMenu.contains(e.target)) {
                 userDropdownMenu.classList.remove('show');
             }
         });
+        
+        // Fermer le menu au clic sur un lien
+        const dropdownLinks = userDropdownMenu.querySelectorAll('a');
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                userDropdownMenu.classList.remove('show');
+            });
+        });
     }
-    
-    // Initialisation des confirmations de suppression
-    initDeleteConfirmations();
-    
-    // Initialisation des previews d'images
-    initImagePreviews();
-    
-    // Initialisation des éditeurs de texte enrichi
-    initRichTextEditors();
-    
-    // Initialisation des messages d'alerte auto-fermants
-    initAlertDismiss();
-});
+}
 
 /**
  * Initialisation des confirmations de suppression
@@ -89,6 +101,10 @@ function initImagePreviews() {
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.className = 'image-preview';
+                        img.style.maxWidth = '200px';
+                        img.style.marginTop = '10px';
+                        img.style.borderRadius = '5px';
+                        img.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
                         previewContainer.appendChild(img);
                     }
                     
@@ -132,6 +148,8 @@ function initAlertDismiss() {
         
         setTimeout(() => {
             alert.style.opacity = '0';
+            alert.style.transition = 'opacity 0.3s ease';
+            
             setTimeout(() => {
                 alert.style.display = 'none';
             }, 300);
@@ -210,6 +228,7 @@ function initSortableTable(tableId) {
         const headers = table.querySelectorAll('th[data-sort]');
         
         headers.forEach(header => {
+            header.style.cursor = 'pointer';
             header.addEventListener('click', function() {
                 const column = Array.from(this.parentNode.children).indexOf(this);
                 const currentIsAsc = this.classList.contains('sort-asc');
@@ -296,152 +315,4 @@ function formatDate(dateString, includeTime = false) {
     }
     
     return date.toLocaleDateString('fr-FR', options);
-}
-
-/**
- * Active la modification en ligne d'un champ
- * 
- * @param {string} displayId ID de l'élément d'affichage
- * @param {string} editId ID de l'élément d'édition
- * @param {string} saveId ID du bouton de sauvegarde
- * @param {string} cancelId ID du bouton d'annulation
- */
-function enableInlineEdit(displayId, editId, saveId, cancelId) {
-    const displayElement = document.getElementById(displayId);
-    const editElement = document.getElementById(editId);
-    const saveButton = document.getElementById(saveId);
-    const cancelButton = document.getElementById(cancelId);
-    
-    if (displayElement && editElement && saveButton && cancelButton) {
-        const originalValue = editElement.value;
-        
-        // Afficher le champ d'édition et masquer l'affichage
-        displayElement.style.display = 'none';
-        editElement.style.display = 'block';
-        saveButton.style.display = 'inline-block';
-        cancelButton.style.display = 'inline-block';
-        
-        // Focus sur le champ d'édition
-        editElement.focus();
-        
-        // Gérer l'annulation
-        cancelButton.addEventListener('click', function() {
-            editElement.value = originalValue;
-            editElement.style.display = 'none';
-            displayElement.style.display = 'block';
-            saveButton.style.display = 'none';
-            cancelButton.style.display = 'none';
-        });
-    }
-}
-
-/**
- * Charge un contenu via AJAX
- * 
- * @param {string} url L'URL à charger
- * @param {string} targetId L'ID de l'élément cible
- * @param {Object} params Paramètres à envoyer (facultatif)
- * @param {string} method Méthode HTTP (GET ou POST)
- */
-function loadContent(url, targetId, params = null, method = 'GET') {
-    const target = document.getElementById(targetId);
-    
-    if (!target) {
-        console.error('Élément cible non trouvé:', targetId);
-        return;
-    }
-    
-    // Afficher un indicateur de chargement
-    target.innerHTML = '<div class="loading">Chargement...</div>';
-    
-    // Préparer les paramètres
-    let urlWithParams = url;
-    let body = null;
-    
-    if (params) {
-        if (method === 'GET') {
-            const queryString = new URLSearchParams(params).toString();
-            urlWithParams = url + (url.includes('?') ? '&' : '?') + queryString;
-        } else {
-            body = JSON.stringify(params);
-        }
-    }
-    
-    // Effectuer la requête
-    fetch(urlWithParams, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: method === 'POST' ? body : null
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erreur réseau');
-        }
-        return response.text();
-    })
-    .then(html => {
-        target.innerHTML = html;
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-        target.innerHTML = '<div class="error">Une erreur est survenue lors du chargement.</div>';
-    });
-}
-
-/**
- * Envoie un formulaire via AJAX
- * 
- * @param {string} formId L'ID du formulaire
- * @param {Function} successCallback Fonction à appeler en cas de succès
- * @param {Function} errorCallback Fonction à appeler en cas d'erreur
- */
-function submitFormAjax(formId, successCallback, errorCallback) {
-    const form = document.getElementById(formId);
-    
-    if (!form) {
-        console.error('Formulaire non trouvé:', formId);
-        return;
-    }
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Récupérer les données du formulaire
-        const formData = new FormData(form);
-        
-        // Effectuer la requête
-        fetch(form.action, {
-            method: form.method,
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erreur réseau');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                if (typeof successCallback === 'function') {
-                    successCallback(data);
-                }
-            } else {
-                if (typeof errorCallback === 'function') {
-                    errorCallback(data);
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-            if (typeof errorCallback === 'function') {
-                errorCallback({ success: false, message: 'Une erreur est survenue lors de l\'envoi du formulaire.' });
-            }
-        });
-    });
 }

@@ -177,11 +177,12 @@
     align-items: center;
 }
 
+/* Dropdown utilisateur */
 .admin-user {
-    display: flex;
-    align-items: center;
     position: relative;
 }
+
+
 
 .user-name {
     margin-right: 10px;
@@ -195,11 +196,27 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: var(--transition-medium);
+}
+
+.user-dropdown-toggle:hover {
+    background-color: rgba(139, 69, 19, 0.1);
 }
 
 .user-dropdown-toggle i {
-    margin-right: 5px;
-    font-size: 1.2rem;
+    margin-left: 5px;
+    font-size: 1rem;
+}
+
+.user-dropdown-toggle .fa-chevron-down {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.user-dropdown-menu.show + .user-dropdown-toggle .fa-chevron-down {
+    transform: rotate(180deg);
 }
 
 .user-dropdown-menu {

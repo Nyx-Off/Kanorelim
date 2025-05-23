@@ -47,19 +47,17 @@ $userInfo = getUserInfo($_SESSION['admin_id']);
                 <div class="header-right">
                     <div class="admin-user">
                         <span class="user-name"><?php echo htmlspecialchars($userInfo['username']); ?></span>
-                        <div class="user-dropdown">
-                            <button class="user-dropdown-toggle">
-                                <i class="fas fa-user-circle"></i>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div class="user-dropdown-menu">
-                                <a href="profile.php">
-                                    <i class="fas fa-user"></i> Mon profil
-                                </a>
-                                <a href="logout.php">
-                                    <i class="fas fa-sign-out-alt"></i> Déconnexion
-                                </a>
-                            </div>
+                        <button class="user-dropdown-toggle">
+                            <i class="fas fa-user-circle"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown-menu">
+                            <a href="profile.php">
+                                <i class="fas fa-user"></i> Mon profil
+                            </a>
+                            <a href="logout.php">
+                                <i class="fas fa-sign-out-alt"></i> Déconnexion
+                            </a>
                         </div>
                     </div>
                 </div>
