@@ -1,8 +1,12 @@
 <?php
-// admin/utilisateurs.php - Gestion des utilisateurs
+
+session_start();
 define('ADMIN_INCLUDED', true);
 require_once 'config.php';
 require_once 'includes/functions.php';
+
+// Vérifier la session admin
+checkAdminSession();
 
 // Vérifier les permissions (seuls les administrateurs peuvent gérer les utilisateurs)
 if ($_SESSION['admin_role'] !== 'admin') {

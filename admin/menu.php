@@ -1,8 +1,12 @@
 <?php
 // admin/menu.php - Gestion du menu
+session_start();
 define('ADMIN_INCLUDED', true);
 require_once 'config.php';
 require_once 'includes/functions.php';
+
+// Vérifier la session admin
+checkAdminSession();
 
 // Vérifier les permissions
 if (!hasPermission('view_menu')) {

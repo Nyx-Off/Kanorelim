@@ -5,6 +5,9 @@ define('ADMIN_INCLUDED', true);
 require_once 'config.php';
 require_once 'includes/functions.php';
 
+// Vérifier la session admin
+checkAdminSession();
+
 // Vérifier les permissions
 if (!hasPermission('view_events')) {
     header('Location: index.php');

@@ -1,15 +1,18 @@
 <?php
 // admin/galerie.php - Gestion de la galerie
+session_start();
 define('ADMIN_INCLUDED', true);
 require_once 'config.php';
 require_once 'includes/functions.php';
+
+// Vérifier la session admin
+checkAdminSession();
 
 // Vérifier les permissions
 if (!hasPermission('view_gallery')) {
     header('Location: index.php');
     exit;
 }
-
 // Traitement des actions
 $message = '';
 $message_type = '';
