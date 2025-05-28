@@ -4,6 +4,9 @@
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
+// Charger les événements depuis la base de données
+$evenements = getEventsFromDatabase();
+
 // Trier les événements par date
 usort($evenements, function($a, $b) {
     return strtotime($a['date']) - strtotime($b['date']);
@@ -20,6 +23,112 @@ $evenements_passes = array_filter($evenements, function($event) {
 
 // Limiter les événements passés aux 3 derniers
 $evenements_passes = array_slice($evenements_passes, -3);
+
+// Traitement du formulaire de réservation d'événement
+$reservation_result = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_reservation_submit'])) {
+    // Récupération des données
+    $event_name = isset($_POST['event']) ? sanitize($_POST['event']) : '';
+    $name = isset($_POST['name']) ? sanitize($_POST['name']) : '';
+    $email = isset($_POST['email']) ? sanitize($_POST['email']) : '';
+    $phone = isset($_POST['phone']) ? sanitize($_POST['phone']) : '';
+    $guests = isset($_POST['guests']) ? (int)$_POST['guests'] : 0;
+    $message = isset($_POST['message']) ? sanitize($_POST['message']) : '';
+    
+    // Validation des données
+    $errors = [];
+    
+    if (empty($event_name)) {
+        $errors[] = 'Veuillez sélectionner un événement';
+    }
+    
+    if (empty($name)) {
+        $errors[] = 'Le nom est requis';
+    }
+    
+    if (empty($email)) {
+        $errors[] = 'L\'email est requis';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'L\'email n\'est pas valide';
+    }
+    
+    if ($guests <= 0 || $guests > 20) {
+        $errors[] = 'Le nombre de personnes doit être entre 1 et 20';
+    }
+    
+    // Si pas d'erreurs, enregistrer la réservation
+    if (empty($errors)) {
+        try {
+            $pdo = connectDB();
+            
+            // Enregistrer la réservation d'événement
+            $stmt = $pdo->prepare("
+                INSERT INTO event_reservations 
+                (event_name, name, email, phone, guests, message, status, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW())
+            ");
+            $stmt->execute([$event_name, $name, $email, $phone, $guests, $message]);
+            
+            // Envoyer l'email à l'admin
+            $email_subject = "Nouvelle réservation d'événement - Taverne Kanorelim";
+            $email_body = "
+                <html>
+                <head>
+                    <title>Nouvelle réservation d'événement</title>
+                </head>
+                <body>
+                    <h2>Nouvelle réservation d'événement</h2>
+                    <p><strong>Événement:</strong> {$event_name}</p>
+                    <p><strong>Nom:</strong> {$name}</p>
+                    <p><strong>Email:</strong> {$email}</p>
+                    <p><strong>Téléphone:</strong> {$phone}</p>
+                    <p><strong>Nombre de personnes:</strong> {$guests}</p>
+                    <p><strong>Message:</strong></p>
+                    <p>{$message}</p>
+                </body>
+                </html>
+            ";
+            
+            sendEmail(ADMIN_EMAIL, $email_subject, $email_body, $email);
+            
+            // Envoyer une confirmation au client
+            $confirm_subject = "Confirmation de votre réservation d'événement - Taverne Kanorelim";
+            $confirm_body = "
+                <html>
+                <head>
+                    <title>Confirmation de votre réservation d'événement</title>
+                </head>
+                <body>
+                    <h2>Confirmation de votre réservation d'événement</h2>
+                    <p>Cher(e) {$name},</p>
+                    <p>Nous avons bien reçu votre demande de réservation pour l'événement \"{$event_name}\" pour {$guests} personne(s).</p>
+                    <p>Un membre de notre équipe vous contactera rapidement pour confirmer votre réservation et vous donner tous les détails pratiques.</p>
+                    <p>Si vous avez des questions, n'hésitez pas à nous contacter.</p>
+                    <p>Au plaisir de vous accueillir prochainement!</p>
+                    <p>L'équipe de la Taverne Kanorelim</p>
+                </body>
+                </html>
+            ";
+            
+            sendEmail($email, $confirm_subject, $confirm_body);
+            
+            $reservation_result = [
+                'success' => true,
+                'message' => 'Votre réservation pour l\'événement a été enregistrée avec succès. Nous vous contacterons rapidement pour confirmation.'
+            ];
+        } catch (Exception $e) {
+            $reservation_result = [
+                'success' => false,
+                'message' => 'Une erreur est survenue lors de l\'enregistrement de la réservation. Veuillez réessayer plus tard.'
+            ];
+        }
+    } else {
+        $reservation_result = [
+            'success' => false,
+            'message' => 'Veuillez corriger les erreurs suivantes: ' . implode(', ', $errors)
+        ];
+    }
+}
 
 // Inclure l'en-tête
 include 'includes/header.php';
@@ -67,19 +176,19 @@ include 'includes/header.php';
                     <?php foreach ($evenements_a_venir as $event): ?>
                         <div class="event-card-large">
                             <div class="event-image">
-                                <img src="<?php echo $event['image']; ?>" alt="<?php echo $event['titre']; ?>">
+                                <img src="<?php echo htmlspecialchars($event['image']); ?>" alt="<?php echo htmlspecialchars($event['titre']); ?>">
                                 <div class="event-date-badge">
                                     <div class="day"><?php echo date('d', strtotime($event['date'])); ?></div>
                                     <div class="month"><?php echo date('M', strtotime($event['date'])); ?></div>
                                 </div>
                             </div>
                             <div class="event-details">
-                                <h3><?php echo $event['titre']; ?></h3>
+                                <h3><?php echo htmlspecialchars($event['titre']); ?></h3>
                                 <div class="event-meta">
-                                    <span><i class="fas fa-clock"></i> <?php echo $event['heure']; ?></span>
-                                    <span><i class="fas fa-coins"></i> <?php echo $event['prix']; ?></span>
+                                    <span><i class="fas fa-clock"></i> <?php echo htmlspecialchars($event['heure']); ?></span>
+                                    <span><i class="fas fa-coins"></i> <?php echo htmlspecialchars($event['prix']); ?></span>
                                 </div>
-                                <p><?php echo $event['description']; ?></p>
+                                <p><?php echo htmlspecialchars($event['description']); ?></p>
                                 <a href="#reservation" class="cta-button">Réserver</a>
                             </div>
                         </div>
@@ -116,6 +225,7 @@ include 'includes/header.php';
     </section>
 
     <!-- Événements passés -->
+    <?php if (!empty($evenements_passes)): ?>
     <section class="past-events">
         <div class="container">
             <div class="section-title">
@@ -123,33 +233,28 @@ include 'includes/header.php';
                 <div class="medieval-divider"></div>
             </div>
             
-            <?php if (!empty($evenements_passes)): ?>
-                <div class="past-events-grid">
-                    <?php foreach ($evenements_passes as $event): ?>
-                        <div class="past-event-card">
-                            <div class="past-event-image">
-                                <img src="<?php echo $event['image']; ?>" alt="<?php echo $event['titre']; ?>">
-                                <div class="event-overlay">
-                                    <span>Événement passé</span>
-                                </div>
-                            </div>
-                            <div class="past-event-details">
-                                <h3><?php echo $event['titre']; ?></h3>
-                                <div class="event-meta">
-                                    <span><i class="fas fa-calendar-alt"></i> <?php echo date('d/m/Y', strtotime($event['date'])); ?></span>
-                                </div>
-                                <p><?php echo substr($event['description'], 0, 100) . '...'; ?></p>
+            <div class="past-events-grid">
+                <?php foreach ($evenements_passes as $event): ?>
+                    <div class="past-event-card">
+                        <div class="past-event-image">
+                            <img src="<?php echo htmlspecialchars($event['image']); ?>" alt="<?php echo htmlspecialchars($event['titre']); ?>">
+                            <div class="event-overlay">
+                                <span>Événement passé</span>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="no-events">
-                    <p>Aucun événement passé à afficher.</p>
-                </div>
-            <?php endif; ?>
+                        <div class="past-event-details">
+                            <h3><?php echo htmlspecialchars($event['titre']); ?></h3>
+                            <div class="event-meta">
+                                <span><i class="fas fa-calendar-alt"></i> <?php echo date('d/m/Y', strtotime($event['date'])); ?></span>
+                            </div>
+                            <p><?php echo htmlspecialchars(substr($event['description'], 0, 100) . '...'); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- Section de services personnalisés -->
     <section class="custom-events">
@@ -196,13 +301,20 @@ include 'includes/header.php';
                     <p>Un acompte de 30% sera demandé pour confirmer votre réservation.</p>
                 </div>
                 <div class="reservation-form-container">
-                    <form class="reservation-form" id="event-reservation-form">
+                    <?php if (isset($reservation_result)): ?>
+                        <div class="message message-<?php echo $reservation_result['success'] ? 'success' : 'error'; ?>">
+                            <?php echo $reservation_result['message']; ?>
+                        </div>
+                    <?php endif; ?>
+                    <form class="reservation-form" id="event-reservation-form" method="post" action="#reservation">
                         <div class="form-group">
                             <label for="event-select">Choisir un événement</label>
                             <select id="event-select" name="event" required>
                                 <option value="">-- Sélectionner un événement --</option>
                                 <?php foreach ($evenements_a_venir as $event): ?>
-                                    <option value="<?php echo $event['titre']; ?>"><?php echo $event['titre']; ?> (<?php echo date('d/m/Y', strtotime($event['date'])); ?>)</option>
+                                    <option value="<?php echo htmlspecialchars($event['titre']); ?>">
+                                        <?php echo htmlspecialchars($event['titre']); ?> (<?php echo date('d/m/Y', strtotime($event['date'])); ?>)
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -231,7 +343,7 @@ include 'includes/header.php';
                             <textarea id="message" name="message" rows="3"></textarea>
                         </div>
                         <div class="form-submit">
-                            <button type="submit" class="cta-button">Réserver</button>
+                            <button type="submit" name="event_reservation_submit" class="cta-button">Réserver</button>
                         </div>
                     </form>
                 </div>
@@ -686,6 +798,33 @@ include 'includes/header.php';
     color: #333;
 }
 
+.event-reservation input:focus,
+.event-reservation select:focus,
+.event-reservation textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+}
+
+.message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.message-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border: 1px solid #d6e9c6;
+}
+
+.message-error {
+    background-color: #f2dede;
+    color: #a94442;
+    border: 1px solid #ebccd1;
+}
+
 @media screen and (max-width: 992px) {
     .intro-content,
     .custom-events-content,
@@ -709,7 +848,7 @@ include 'includes/header.php';
 
 @media screen and (max-width: 768px) {
     .banner-content h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
     
     .image-grid {
@@ -719,18 +858,6 @@ include 'includes/header.php';
     .event-meta {
         flex-direction: column;
         gap: 5px;
-    }
-}
-</style>
-
-<?php
-// Inclure le pied de page
-include 'includes/footer.php';
-?>font-size: 2.5rem;
-    }
-    
-    .past-events-grid {
-        grid-template-columns: 1fr;
     }
     
     .newsletter-form .form-row {
@@ -749,3 +876,16 @@ include 'includes/footer.php';
 
 @media screen and (max-width: 480px) {
     .banner-content h1 {
+        font-size: 2rem;
+    }
+    
+    .past-events-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<?php
+// Inclure le pied de page
+include 'includes/footer.php';
+?>

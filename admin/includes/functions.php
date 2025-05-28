@@ -119,10 +119,22 @@ function uploadImage($file, $destination, $filename = '', $max_size = 2097152) {
     
     // Déplacer le fichier
     if (move_uploaded_file($file['tmp_name'], $filepath)) {
+        // Créer l'URL relative pour la base de données
+        // Enlever le chemin du serveur et ne garder que le chemin relatif
+        $relative_path = str_replace($_SERVER['DOCUMENT_ROOT'], '', $filepath);
+        
+        // S'assurer que le chemin commence par /
+        if (!str_starts_with($relative_path, '/')) {
+            $relative_path = '/' . $relative_path;
+        }
+        
+        // Remplacer les backslashes par des slashes (Windows)
+        $relative_path = str_replace('\\', '/', $relative_path);
+        
         return [
             'filename' => $filename . '.' . $extension,
             'filepath' => $filepath,
-            'url' => str_replace($_SERVER['DOCUMENT_ROOT'], '', $filepath)
+            'url' => $relative_path
         ];
     }
     
@@ -238,3 +250,4 @@ function hasPermission($permission) {
            isset($permissions[$_SESSION['admin_role']]) && 
            in_array($permission, $permissions[$_SESSION['admin_role']]);
 }
+?>

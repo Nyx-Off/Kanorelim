@@ -4,95 +4,12 @@
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
-// Configuration des images de la galerie
-$galerie_images = [
-    [
-        'id' => 1,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Façade de la Taverne Kanorelim',
-        'category' => 'taverne'
-    ],
-    [
-        'id' => 2,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Salle principale avec son feu de cheminée',
-        'category' => 'taverne'
-    ],
-    [
-        'id' => 3,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Notre bar et ses tonneaux d\'hydromel',
-        'category' => 'taverne'
-    ],
-    [
-        'id' => 4,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'La salle du donjon pour les banquets privés',
-        'category' => 'taverne'
-    ],
-    [
-        'id' => 5,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Plateau de fromages et charcuteries',
-        'category' => 'nourriture'
-    ],
-    [
-        'id' => 6,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Cochon rôti, notre spécialité',
-        'category' => 'nourriture'
-    ],
-    [
-        'id' => 7,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Sélection de nos hydromels et bières',
-        'category' => 'nourriture'
-    ],
-    [
-        'id' => 8,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Desserts médiévaux aux fruits et au miel',
-        'category' => 'nourriture'
-    ],
-    [
-        'id' => 9,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Troubadours lors de notre soirée musicale',
-        'category' => 'evenements'
-    ],
-    [
-        'id' => 10,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Combat d\'épée lors du tournoi de chevalerie',
-        'category' => 'evenements'
-    ],
-    [
-        'id' => 11,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Grand banquet du Printemps',
-        'category' => 'evenements'
-    ],
-    [
-        'id' => 12,
-        'src' => '/api/placeholder/800/600',
-        'caption' => 'Atelier de calligraphie médiévale',
-        'category' => 'evenements'
-    ],
-];
-
-// Catégories de la galerie
-$categories = [
-    'all' => 'Toutes les images',
-    'taverne' => 'La Taverne',
-    'nourriture' => 'Mets & Boissons',
-    'evenements' => 'Événements'
-];
+// Obtenir les catégories de la galerie depuis la base de données
+$categories = getGalleryCategories();
 
 // Filtrer les images par catégorie si un filtre est appliqué
 $categorie_active = isset($_GET['categorie']) && array_key_exists($_GET['categorie'], $categories) ? $_GET['categorie'] : 'all';
-$images_filtrees = ($categorie_active === 'all') ? $galerie_images : array_filter($galerie_images, function($img) use ($categorie_active) {
-    return $img['category'] === $categorie_active;
-});
+$images_filtrees = getGalleryImages($categorie_active);
 
 // Inclure l'en-tête
 include 'includes/header.php';
@@ -137,12 +54,12 @@ include 'includes/header.php';
                     <?php foreach ($images_filtrees as $image): ?>
                         <div class="gallery-item">
                             <div class="gallery-image">
-                                <img src="<?php echo $image['src']; ?>" alt="<?php echo $image['caption']; ?>">
+                                <img src="<?php echo htmlspecialchars($image['src']); ?>" alt="<?php echo htmlspecialchars($image['caption']); ?>">
                                 <div class="gallery-overlay">
                                     <span><i class="fas fa-search-plus"></i></span>
                                 </div>
                             </div>
-                            <div class="gallery-caption"><?php echo $image['caption']; ?></div>
+                            <div class="gallery-caption"><?php echo htmlspecialchars($image['caption']); ?></div>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -513,7 +430,7 @@ include 'includes/header.php';
     right: -80px;
 }
 
-.lightbox-image {
+#lightbox-image {
     display: block;
     max-width: 100%;
     max-height: 80vh;
@@ -533,6 +450,10 @@ include 'includes/header.php';
     padding: 80px 0;
     background-color: #2C1B0E;
     color: var(--color-light);
+}
+
+.virtual-tour .section-title h2 {
+    color: var(--color-gold);
 }
 
 .virtual-tour-content {
@@ -688,3 +609,170 @@ include 'includes/header.php';
 .timeline-content p {
     color: #555;
     line-height: 1.7;
+}
+
+/* Section partage de photos */
+.share-photos {
+    padding: 80px 0;
+    background-color: #efe7d5;
+}
+
+.share-photos-content {
+    display: flex;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.share-info {
+    flex: 1;
+}
+
+.share-info p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #555;
+}
+
+.social-share {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.social-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: var(--color-light);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: var(--transition-medium);
+}
+
+.social-button:hover {
+    background-color: var(--color-accent);
+    color: var(--color-light);
+}
+
+.social-button i {
+    margin-right: 8px;
+}
+
+.share-form {
+    flex: 1;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: var(--shadow-soft);
+}
+
+.share-form h3 {
+    color: var(--color-primary);
+    margin-bottom: 20px;
+}
+
+.share-form .form-group {
+    margin-bottom: 20px;
+}
+
+.share-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.share-form input,
+.share-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: var(--transition-medium);
+}
+
+.share-form input:focus,
+.share-form textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+}
+
+@media screen and (max-width: 992px) {
+    .virtual-tour-content,
+    .share-photos-content {
+        flex-direction: column;
+    }
+    
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-date {
+        left: 30px;
+        transform: none;
+    }
+    
+    .timeline-content {
+        width: calc(100% - 100px);
+        margin-left: 100px;
+        margin-right: 0;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .banner-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .lightbox-nav {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    .lightbox-prev {
+        left: 20px;
+    }
+    
+    .lightbox-next {
+        right: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .banner-content h1 {
+        font-size: 2rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-share {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+    // Script pour la galerie et la lightbox
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation de la galerie
+        initializeGallery();
+    });
+</script>
+
+<?php
+// Inclure le pied de page
+include 'includes/footer.php';
+?>

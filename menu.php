@@ -4,6 +4,9 @@
 require_once 'includes/config.php';
 require_once 'includes/functions.php';
 
+// Charger le menu depuis la base de données
+$categories_menu = getMenuFromDatabase();
+
 // Inclure l'en-tête
 include 'includes/header.php';
 ?>
@@ -31,10 +34,20 @@ include 'includes/header.php';
             </div>
 
             <div class="menu-container">
-                <!-- Menu généré dynamiquement -->
-                <?php echo generateMenuHTML($categories_menu); ?>
+                <!-- Menu généré dynamiquement depuis la base de données -->
+                <?php 
+                if (!empty($categories_menu)) {
+                    echo generateMenuHTML($categories_menu);
+                } else {
+                    echo '<div class="no-menu-items">';
+                    echo '<p>Le menu est en cours de mise à jour. Veuillez nous contacter pour connaître nos spécialités du jour.</p>';
+                    echo '<a href="contact.php" class="cta-button">Nous contacter</a>';
+                    echo '</div>';
+                }
+                ?>
             </div>
 
+            <?php if (!empty($categories_menu)): ?>
             <div class="menu-notes">
                 <h3>Notes sur notre cuisine</h3>
                 <p>Tous nos plats sont préparés sur place avec des ingrédients frais et locaux.</p>
@@ -43,8 +56,9 @@ include 'includes/header.php';
             </div>
 
             <div class="center-button">
-                <a href="#reservation" class="cta-button">Réserver une table</a>
+                <a href="index.php#reservation" class="cta-button">Réserver une table</a>
             </div>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -275,6 +289,20 @@ include 'includes/header.php';
     border-left: 3px solid #4a8d47;
 }
 
+.no-menu-items {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #f9f6f0;
+    border-radius: 5px;
+    margin: 40px 0;
+}
+
+.no-menu-items p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 30px;
+}
+
 .menu-notes {
     max-width: 800px;
     margin: 40px auto;
@@ -299,6 +327,10 @@ include 'includes/header.php';
     padding: 80px 0;
     background-color: #2C1B0E;
     color: var(--color-light);
+}
+
+.chef-special .section-title h2 {
+    color: var(--color-gold);
 }
 
 .special-content {
@@ -390,6 +422,25 @@ include 'includes/header.php';
     margin-bottom: 20px;
     font-size: 1.1rem;
     line-height: 1.7;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.testimonial-author .name {
+    font-family: var(--font-medieval);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 5px;
+}
+
+.stars {
+    color: var(--color-gold);
+    font-size: 1rem;
 }
 
 .private-dining {
