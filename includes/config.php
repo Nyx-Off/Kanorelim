@@ -7,10 +7,10 @@ define('ADMIN_EMAIL', 'contact@kanorelim.fr');
 
 // Configuration de la base de données
 if (!defined('DB_HOST')) {
-    define('DB_HOST', 'zy16r.myd.infomaniak.com');
-    define('DB_NAME', 'zy16r_kanorelim');
-    define('DB_USER', 'zy16r_system');
-    define('DB_PASSWORD', 'SamyBensalem@2024');
+    define('DB_HOST', '');
+    define('DB_NAME', '');
+    define('DB_USER', '');
+    define('DB_PASSWORD', '');
 }
 
 // Fonction de connexion à la base de données (une seule déclaration)
